@@ -12,6 +12,16 @@ resource "google_container_cluster" "primary" {
     delete = lookup(var.cluster_timeouts, "delete", "20m")
   }
   deletion_protection = var.deletion_protection
+
+  master_authorized_networks_config {
+    cidr_blocks {
+      cidr_block = var.gke_whitelist
+    }
+  }
+  private_cluster_config {
+    enable_private_nodes    = var.enable_private_nodes
+    enable_private_endpoint = var.enable_private_endpoint
+  }
 }
 
 resource "google_container_node_pool" "primary_nodes" {
